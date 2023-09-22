@@ -1,5 +1,5 @@
 nimTitle	getprime	getprime.html	module src/getprime		0
-nim	fastPowMod	getprime.html#fastPowMod,int,int,int	proc fastPowMod(n: int; k: int; m: int): int		25
-nim	millerRabinTest	getprime.html#millerRabinTest,int,int	proc millerRabinTest(n, tests: int): bool		36
-nim	isPrime	getprime.html#isPrime,int	proc isPrime(n: int): bool		64
-nim	getPrime	getprime.html#getPrime,Slice[int]	proc getPrime(r: Slice[int]): int		74
+nim	fastPowMod	getprime.html#fastPowMod,int,int,int	proc fastPowMod(n: int; k: int; m: int): int		27
+nim	millerRabinTest	getprime.html#millerRabinTest,int,int	proc millerRabinTest(n, tests: int): bool		43
+nim	isPrime	getprime.html#isPrime,int	proc isPrime(n: int): bool		78
+nim	getPrime	getprime.html#getPrime,Slice[int]	proc getPrime(r: Slice[int]): int		94
