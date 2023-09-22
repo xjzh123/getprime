@@ -1,0 +1,85 @@
+import std/random
+
+const tests = 30
+
+const primes = [
+  2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
+  31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
+  73, 79, 83, 89, 97, 101, 103, 107, 109, 113,
+  127, 131, 137, 139, 149, 151, 157, 163, 167, 173,
+  179, 181, 191, 193, 197, 199, 211, 223, 227, 229,
+  233, 239, 241, 251, 257, 263, 269, 271, 277, 281,
+  283, 293, 307, 311, 313, 317, 331, 337, 347, 349,
+  353, 359, 367, 373, 379, 383, 389, 397, 401, 409,
+  419, 421, 431, 433, 439, 443, 449, 457, 461, 463,
+  467, 479, 487, 491, 499, 503, 509, 521, 523, 541,
+  547, 557, 563, 569, 571, 577, 587, 593, 599, 601,
+  607, 613, 617, 619, 631, 641, 643, 647, 653, 659,
+  661, 673, 677, 683, 691, 701, 709, 719, 727, 733,
+  739, 743, 751, 757, 761, 769, 773, 787, 797, 809,
+  811, 821, 823, 827, 829, 839, 853, 857, 859, 863,
+  877, 881, 883, 887, 907, 911, 919, 929, 937, 941,
+  947, 953, 967, 971, 977, 983, 991, 997
+]
+
+func fastPowMod*(n: int, k: int, m: int): int =
+  ## Calculates `n ^ k mod m`.
+  result = 1
+  var k = k
+  var n = n mod m
+  while k != 0:
+    if (k and 1) == 1:
+      result = result * n mod m
+    k = k div 2
+    n = n * n mod m
+
+proc millerRabinTest*(n, tests: int): bool =
+  ## Uses Miller Rabin Algorithm to test whether `n` is (probably) a prime number.
+  let (k, q) = block:
+    var (k, q) = (0, n - 1)
+    while (q and 1) == 0:
+      q = q div 2
+      inc k
+    (k, q)
+
+  for i in 0 ..< tests:
+    var composite = true
+    let a = rand(2 .. n-2)
+
+    var r = fastPowMod(a, q, n)
+    if r == 1 or r == n - 1:
+      composite = false
+    else:
+      block inner:
+        for j in 1..<k:
+          r = r * r mod n
+          if r == n - 1:
+            composite = false
+            break inner
+    if composite:
+      return false
+
+  return true
+
+proc isPrime*(n: int): bool =
+  ## Decide whether `n` is a prime number. Use for big numbers.
+  ## Firstly uses a table to check for small prime factors, which is considered faster than using the Miller Rabin test at first.
+  for p in primes:
+    if n == p:
+      return true
+    if n mod p == 0:
+      return false
+  return millerRabinTest(n, tests)
+
+proc getPrime*(r: Slice[int]): int =
+  ## Generate prime number inside range `r`. Use for big enough ranges, like `10e9 .. 10e10`.
+  let a = r.a div 6
+  let b = r.b div 6
+
+  let offset = sample([1, 5]) # Trick to save time generating random `6n+1` or `6n+5` numbers as any prime numbers > 6 must be `6n+1` or `6n+5`.
+
+  while true:
+    let x = rand(a..b) * 6 + offset
+
+    if isPrime(x) and x in r:
+      return x
