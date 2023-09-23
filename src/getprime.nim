@@ -55,7 +55,7 @@ proc millerRabinTest*(n, tests: int): bool =
   let (k, q) = block:
     var (k, q) = (0, n - 1)
     while (q and 1) == 0:
-      q = q div 2
+      q = q shr 1
       inc k
     (k, q)
 
