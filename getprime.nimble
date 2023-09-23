@@ -15,3 +15,6 @@ requires "nim >= 1.0.0"
 
 task benchmark, "Run the benchmark":
   exec "nim c -r benchmark/benchmark"
+
+task docgen, "Generate documents":
+  exec "nim doc --project --index:on --outdir:htmldocs src/getprime.nim"

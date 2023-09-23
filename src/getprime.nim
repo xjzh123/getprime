@@ -1,8 +1,8 @@
-## Generate random prime numbers, and do prime number tests. Note: don't support prime numbers larger than approximately 3037000499 (sqrt(int.high)).
+## Generate random prime numbers, and do prime number tests.
+## 
+## Note: don't support prime numbers larger than approximately 3037000499 (sqrt(int.high)).
 
 import std/random
-
-const tests = 30
 
 const primes = [
   2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
@@ -26,6 +26,8 @@ const primes = [
 
 func fastPowMod*(n: int, k: int, m: int): int =
   ## Calculates `n ^ k mod m`.
+  ##
+  ## Note: when `m` is big as 10e9, doesn't support `n` larger than approximately 3037000499 (sqrt(int.high)).
   runnableExamples:
     import std/math
     assert fastPowMod(2, 9, 7) == 2 ^ 9 mod 7
@@ -42,7 +44,8 @@ func fastPowMod*(n: int, k: int, m: int): int =
 
 proc millerRabinTest*(n, tests: int): bool =
   ## Uses Miller Rabin Algorithm to test whether `n` is (probably) a prime number, test for `tests` times.
-  ## Note: don't support n larger than approximately 3037000499 (sqrt(int.high)).
+  ##
+  ## Note: doesn't support `n` larger than approximately 3037000499 (sqrt(int.high)).
   runnableExamples:
     assert millerRabinTest(2047, 10) == false
     assert millerRabinTest(2769155087, 10) == false
@@ -75,9 +78,12 @@ proc millerRabinTest*(n, tests: int): bool =
 
   return true
 
-proc isPrime*(n: int): bool =
+proc isPrime*(n: int, tests = 30): bool =
   ## Decide whether `n` is a prime number. Use for big numbers.
+  ##
   ## Firstly uses a table to check for small prime factors, which is considered faster than using the Miller Rabin test at first.
+  ##
+  ## Note: doesn't support `n` larger than approximately 3037000499 (sqrt(int.high)), except for the case that `n` can be confirmed as compisite number by checking factors with the table of prime numbers < 1000.
   runnableExamples:
     assert isPrime(2047) == false
     assert isPrime(2769155087) == false
@@ -93,6 +99,8 @@ proc isPrime*(n: int): bool =
 
 proc getPrime*(r: Slice[int]): int =
   ## Generate random prime number in range `r`. Use for big enough ranges, like `10e9 .. 10e10`.
+  ##
+  ## Note: doesn't support numbers larger than approximately 3037000499 (sqrt(int.high)).
   runnableExamples:
     assert isPrime(getPrime(100000..100000000))
 

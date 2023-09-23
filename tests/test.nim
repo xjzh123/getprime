@@ -25,7 +25,7 @@ test "Miller Rabin Test":
   check millerRabinTest(2769155087, 10) == false
   check millerRabinTest(1000000007, 10) == true
   check millerRabinTest(1000000009, 10) == true
-  check millerRabinTest(3037000499, 10) in [true, false]
+  check millerRabinTest(3037000499, 10) == false
 
 test "isPrime":
 
